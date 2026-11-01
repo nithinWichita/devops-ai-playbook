@@ -252,23 +252,31 @@ Create or edit `~/.claude/settings.json` with the following:
 
 ---
 
-### Step 5 — Install the Terraform Skill
+### Step 5 — Install the Terraform Plugin
 
-Skills are domain-specific knowledge packs that give Claude deeper context for specific tools. Install the Terraform skill:
+Claude Code adds skills and MCP servers through **plugins** (there is no `claude skills` command). HashiCorp publishes an official `terraform` plugin in the `claude-plugins-official` marketplace. It runs HashiCorp's Terraform MCP server, which replaces the retired `awslabs.terraform-mcp-server`.
+
+The server runs in Docker, so start Docker Desktop first:
 
 ```bash
-claude skills install terraform-skill
+docker info
 ```
 
-This gives Claude richer context for Terraform module patterns, security scanning with Checkov, testing strategies, and CI/CD workflows — beyond what's in its base training.
+Then install the plugin:
+
+```bash
+claude plugin install terraform@claude-plugins-official
+```
 
 Verify it installed:
 
 ```bash
-claude skills list
+claude plugin list
 ```
 
-You should see `terraform-skill` listed.
+You should see `terraform` listed. Restart your Claude Code session, then run `/mcp` — the `terraform` server should show as connected (the first start pulls the `hashicorp/terraform-mcp-server` image, so give it a minute).
+
+> To run `terraform plan`/`apply` locally you also need the Terraform CLI: `brew install hashicorp/tap/terraform`.
 
 ---
 
